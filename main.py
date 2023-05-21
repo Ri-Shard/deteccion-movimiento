@@ -1,15 +1,22 @@
 import cv2
 import numpy as np
 
+
 cap = cv2.VideoCapture('aeropuerto.mp4')
 
 fgbg = cv2.bgsegm.createBackgroundSubtractorMOG()
 kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(3,3))
 
+def rescale_frame(frame, percent=75):
+    width = int(frame.shape[1] * percent/ 100)
+    height = int(frame.shape[0] * percent/ 100)
+    dim = (width, height)
+    return cv2.resize(frame, dim, interpolation =cv2.INTER_AREA)
 
 while True:
 
     ret, frame = cap.read()
+    frame = rescale_frame(frame,35)
     if ret == False: break
 
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -42,18 +49,18 @@ while True:
             cv2.rectangle(frame, (x,y), (x+w, y+h),(0,255,0), 2)
             texto_estado = "Estado: Alerta Movimiento Detectado!"
             color = (0, 0, 255)    
-                # Visuzalizamos el alrededor del área que vamos a analizar
-        # y el estado de la detección de movimiento        
-        cv2.drawContours(frame, [area_pts], -1, color, 2)
-        cv2.putText(frame, texto_estado , (10, 30),
-                    cv2.FONT_HERSHEY_SIMPLEX, 1, color,2)
+    # Visuzalizamos el alrededor del área que vamos a analizar
+    # y el estado de la detección de movimiento        
+    cv2.drawContours(frame, [area_pts], -1, color, 2)
+    cv2.putText(frame, texto_estado , (10, 30),
+                cv2.FONT_HERSHEY_SIMPLEX, 1, color,2)
 
-        cv2.imshow('fgmask', fgmask)
-        cv2.imshow("frame", frame)
+    cv2.imshow('fgmask', fgmask)
+    cv2.imshow("frame", frame)
 
-        k = cv2.waitKey(70) & 0xFF
-        if k == 27:
-            break
+    k = cv2.waitKey(70) & 0xFF
+    if k == 27:
+        break
 
 cap.release()
 cv2.destroyAllWindows()
