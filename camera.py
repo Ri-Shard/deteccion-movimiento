@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 
-video = cv2.VideoCapture(0)
+video = cv2.VideoCapture('http://192.168.1.3:4747/video')
 
 i = 0
 while True:
