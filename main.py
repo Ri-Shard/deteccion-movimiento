@@ -1,7 +1,10 @@
 import cv2
 import numpy as np
+import tensorflow as tf
 
 
+model = tf.keras.models.load_model('/home/rishard/Documents/IAproyect/model/')
+# cap = cv2.VideoCapture('http://192.168.1.3:4747/video')
 cap = cv2.VideoCapture('aeropuerto.mp4')
 
 fgbg = cv2.bgsegm.createBackgroundSubtractorMOG()
